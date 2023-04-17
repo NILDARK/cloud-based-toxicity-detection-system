@@ -6,7 +6,7 @@ from scipy.sparse import hstack
 pickle_in = open("Classifiers.pkl","rb")
 classifiers=joblib.load(pickle_in)
 
-pickle_in = open("CharVectorizer.pkl","rb")
+pickle_in = open("CharVectorizer.pkl","rb") 
 char_vectorizer=joblib.load(pickle_in)
 
 pickle_in = open("WordVectorizer.pkl","rb")
@@ -15,7 +15,7 @@ word_vectorizer=joblib.load(pickle_in)
 application = Flask(__name__)
 @application.route("/",methods=["GET"])
 def home():
-    return "Hello Its running mf..."
+    return "Toxicity Detector API"
 @application.route("/predict/<text>",methods=["POST"])
 def predict(text):
     # payload = request.get_json()

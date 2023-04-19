@@ -13,12 +13,14 @@ def getTweetText(link,queue):
     try:
         session = HTMLSession()
         r = session.get(link)
-        r.html.render(sleep=2)
+        r.html.render(sleep=2, timeout = 20)
         tweet_text = r.html.find('.css-1dbjc4n.r-1s2bzr4', first=True)
+        # r.html.render(timeout=20)
         fetched_text = tweet_text.text
         queue.put(tweet_text.text)
         return fetched_text
-    except:
+    except Exception as e:
+        print(e)
         queue.put(None)
         return None
 
@@ -29,9 +31,9 @@ class Ui_Form(QDialog):
             if(not self.process.is_alive()):
                 self.progress_dialog.setValue(100)
                 break
-            time.sleep(0.08)
+            time.sleep(1)
             self.progress_dialog.setValue(i)
-            i+=1
+            i+=5
         self.progress_dialog.close()
             
     def showProgressBar(self,link):
@@ -91,6 +93,15 @@ class Ui_Form(QDialog):
         except Exception as e:
             print(e)
             pass
+    def alter_text(self,text):
+        print(text)
+        words = list(text.split(' '))
+        if(len(words) > 10):
+            words = words[:10]
+            text = " ".join(words)+ "..."
+            # print(text)
+        return text
+
     def showStats(self):
         try:
             self.canvas.deleteLater()
@@ -110,19 +121,21 @@ class Ui_Form(QDialog):
             text = self.showProgressBar(link)
             if(text == None):
                 QMessageBox.critical(
-                    self, "Error", "Link is not valid, or Tweet is older than one week!")
+                    self, "Error", "Tweet link is not valid, or Network Connection Error")
                 self.reset()
                 return
+        # alterText = text
+        alterText = self.alter_text(text)
         self.retrived_display.setVisible(True)
         self.retrived_text_display.setVisible(True)
-        self.retrived_text_display.setText(text)
+        self.retrived_text_display.setText(alterText)
         stats = self.getStats(text)
         self.form.resize(1100, 600)
         self.showPlot(stats)
     def onLinkCheck(self):
         if(self.link_bool.isChecked()):
             self.input.setText('Link:')
-            self.text_input.setPlaceholderText("Enter link here!")
+            self.text_input.setPlaceholderText("Enter Twitter link here!")
         else:
             self.input.setText('Text:')
             self.text_input.setPlaceholderText("Enter text here!")

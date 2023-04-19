@@ -10,13 +10,10 @@ from scipy.sparse import hstack
 pickle_in = open("Classifiers.pkl","rb")
 classifiers=joblib.load(pickle_in)
 
-<<<<<<< Updated upstream
 pickle_in = open("CharVectorizer.pkl","rb") 
 char_vectorizer=joblib.load(pickle_in)
-=======
 # pickle_in = open("CharVectorizer.pkl","rb")
 # char_vectorizer=joblib.load(pickle_in)
->>>>>>> Stashed changes
 
 def load_vectorizer(file_path):
     """

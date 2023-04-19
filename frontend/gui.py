@@ -15,7 +15,6 @@ def getTweetText(link,queue):
         r = session.get(link)
         r.html.render(sleep=2, timeout = 20)
         tweet_text = r.html.find('.css-1dbjc4n.r-1s2bzr4', first=True)
-        # r.html.render(timeout=20)
         fetched_text = tweet_text.text
         queue.put(tweet_text.text)
         return fetched_text
@@ -44,6 +43,7 @@ class Ui_Form(QDialog):
         self.progress_dialog.setLabelText("Fetching tweet...")
         self.progress_dialog.setRange(0, 100)
         self.progress_dialog.setCancelButton(None)
+        self.progress_dialog.setWindowTitle("Fetching")
         self.progress_dialog.setWindowModality(Qt.WindowModal)
         self.progress_dialog.setAutoClose(False)
         self.progress_dialog.show()
@@ -124,7 +124,6 @@ class Ui_Form(QDialog):
                     self, "Error", "Tweet link is not valid, or Network Connection Error")
                 self.reset()
                 return
-        # alterText = text
         alterText = self.alter_text(text)
         self.retrived_display.setVisible(True)
         self.retrived_text_display.setVisible(True)
